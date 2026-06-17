@@ -1,0 +1,31 @@
+/* Estilos adicionados para os novos elementos da Sprint 2 */
+.btn-baixar {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.btn-baixar:hover {
+    background-color: #218838;
+}
+
+.btn-excluir {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.btn-excluir:hover {
+    background-color: #c82333;
+}
+
+td div {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
