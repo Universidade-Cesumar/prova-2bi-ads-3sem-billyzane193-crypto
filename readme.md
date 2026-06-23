@@ -1,22 +1,22 @@
-# Sistema de Controle de Estoque - Sprint 2
+# Sistema de Controle de Estoque - Dashboard & Gestão
 
-Este projeto é um módulo de gerenciamento de materiais desenvolvido para a avaliação do 2º Bimestre. O foco desta entrega foi a implementação das funcionalidades de baixa de insumos e exclusão de itens integrados a uma API simulada.
+Este projeto é um sistema de gerenciamento de materiais desenvolvido para a disciplina de ADS. Evoluído ao longo das Sprints, o sistema agora conta com um dashboard completo, controle de estoque crítico e integração robusta com API.
 
-## 🚀 Funcionalidades Implementadas
+## 🌐 Link do Projeto (Deploy)
+[https://billyzane193-crypto.github.io/prova-2bi-ads-3sem-billyzane193-crypto/]
 
-- **Baixa de Estoque (PUT):** Permite reduzir a quantidade de um material disponível através do identificador `#input-retirada` e do botão `.btn-baixar`.
-- **Validação de Segurança:** Implementação da função obrigatória `validarRetirada(estoqueAtual, quantidadeRetirada)` que impede a inserção de valores negativos ou retiradas maiores do que o saldo em estoque.
-- **Exclusão de Materiais (DELETE):** Remoção definitiva de itens tanto do servidor MockAPI quanto do fluxo visual da tela usando o botão `.btn-excluir`.
+## 🚀 Funcionalidades Atuais
 
-## 🛠️ Tecnologias Utilizadas
+- **Dashboard Integrado:** Filtro de busca em tempo real com contador dinâmico de itens (`#total-itens`).
+- **Alerta de Estoque Crítico:** Identificação visual automática (`.estoque-critico`) para materiais com menos de 10 unidades.
+- **Gestão de Materiais:** Cadastro (POST), Baixa de estoque via PUT (com validação obrigatória) e Exclusão (DELETE).
+- **Segurança:** Tratamento de erros de conexão via `try/catch` em todas as requisições assíncronas.
 
-- HTML5 (Estruturação da interface)
-- CSS3 (Estilização básica)
-- JavaScript Vanilla (Consumo de API assíncrona com Async/Await e manipulação do DOM)
-- MockAPI (Servidor remoto para persistência dos dados)
+## 🛠️ Tecnologias
+- HTML5, CSS3, JavaScript (ES6+).
+- Integração via `fetch` com MockAPI.
+- Versionamento com Git/GitHub.
 
-## 📦 Como Rodar o Projeto
-
-1. Faça o clone deste repositório para a sua máquina local.
-2. Abra o arquivo `index.html` diretamente em seu navegador ou utilize a extensão **Live Server** no VS Code para rodar um servidor local.
-3. Certifique-se de que possui conexão com a internet para que as requisições à MockAPI funcionem corretamente.
+## 📦 Como Rodar
+1. Acesse o link do deploy acima ou clone este repositório.
+2. Certifique-se de estar com conexão à internet para carregar os dados da API.
