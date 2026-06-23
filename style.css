@@ -1,4 +1,4 @@
-/* Estilos adicionados para os novos elementos da Sprint 2 */
+/* Estilos mantidos da Sprint 2 */
 .btn-baixar {
     background-color: #28a745;
     color: white;
@@ -28,4 +28,27 @@ td div {
     gap: 8px;
     justify-content: center;
     align-items: center;
+}
+
+/* Novos estilos da Sprint 3 */
+
+/* Estilo obrigatório para estoque baixo */
+.estoque-critico {
+    background-color: #ffcccc !important; /* Destaque visual exigido */
+    color: #a94442;
+    font-weight: bold;
+}
+
+/* Estilo para o campo de busca e contador */
+#input-busca {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#total-itens {
+    font-weight: bold;
+    color: #333;
 }

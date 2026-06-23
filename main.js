@@ -3,138 +3,112 @@ const API_URL = "https://6a308e06a7f8866418d6230f.mockapi.io/api/v1/materiais";
 const inputNome = document.getElementById("input-nome");
 const inputQuantidade = document.getElementById("input-quantidade");
 const btnCadastrar = document.getElementById("btn-cadastrar");
-const listaMateriais = document.getElementById("lista-materials"); // Alinhado com o ID do HTML
+const listaMateriais = document.getElementById("lista-materiais"); 
 
-// 1. FUNÇÃO OBRIGATÓRIA DE VALIDAÇÃO (0,5 pt)
+// Novos elementos da Sprint 3
+const inputBusca = document.getElementById("input-busca");
+const spanTotal = document.getElementById("total-itens");
+
+// 1. FUNÇÃO OBRIGATÓRIA DE VALIDAÇÃO (Mantida)
 function validarRetirada(estoqueAtual, quantidadeRetirada) {
-    if (quantidadeRetirada <= 0) {
-        return false; 
-    }
-    if (quantidadeRetirada > estoqueAtual) {
-        return false; 
-    }
-    return true; 
+    if (quantidadeRetirada <= 0 || quantidadeRetirada > estoqueAtual) return false;
+    return true;
 }
 
-// 2. RENDERIZAÇÃO DINÂMICA DA TABELA
+// 2. RENDERIZAÇÃO DINÂMICA (Sprint 2 + Sprint 3)
 async function carregarMateriais() {
     try {
         const resposta = await fetch(API_URL);
+        // Tratamento de erro robusto (Sprint 3)
+        if (!resposta.ok) throw new Error("Erro na rede");
+        
         const materiais = await resposta.json();
 
-        const tabelaBody = document.getElementById("lista-materiais");
-        tabelaBody.innerHTML = "";
+        // Lógica de busca (Sprint 3)
+        const termo = inputBusca.value.toLowerCase();
+        const filtrados = materiais.filter(m => m.nome.toLowerCase().includes(termo));
 
-        materiais.forEach(material => {
-            tabelaBody.innerHTML += `
-                <tr>
+        listaMateriais.innerHTML = "";
+
+        filtrados.forEach(material => {
+            // Aplicação da classe obrigatória (Sprint 3)
+            const classeCritica = material.quantidade < 10 ? 'class="estoque-critico"' : '';
+            
+            listaMateriais.innerHTML += `
+                <tr ${classeCritica}>
                     <td>${material.nome}</td>
                     <td>${material.quantidade}</td>
                     <td>
                         <div style="display: flex; gap: 5px; justify-content: center;">
-                            <input type="number" id="input-retirada" class="input-retirada-qtd" data-id="${material.id}" placeholder="Qtd" style="width: 60px; margin-bottom: 0; padding: 5px;">
-                            
-                            <button class="btn-baixar" onclick="baixarEstoque('${material.id}', ${material.quantidade})" style="width: auto; padding: 5px 10px;">Baixar</button>
-                            <button class="btn-excluir" onclick="excluirMaterial('${material.id}')" style="width: auto; padding: 5px 10px;">Excluir</button>
+                            <input type="number" class="input-retirada-qtd" data-id="${material.id}" placeholder="Qtd" style="width: 60px;">
+                            <button class="btn-baixar" onclick="baixarEstoque('${material.id}', ${material.quantidade})">Baixar</button>
+                            <button class="btn-excluir" onclick="excluirMaterial('${material.id}')">Excluir</button>
                         </div>
                     </td>
                 </tr>
             `;
         });
 
+        // Atualização do contador (Sprint 3)
+        spanTotal.innerText = filtrados.length;
+
     } catch (erro) {
-        console.log("Erro ao carregar materiais:", erro);
+        console.error("Erro no sistema:", erro);
+        // Tratamento visual de erro para o usuário (Sprint 3)
+        alert("Ops! Não foi possível carregar os materiais. Verifique sua conexão.");
     }
 }
 
-// 3. CONEXÃO PUT - BAIXAR ESTOQUE (1,0 pt)
+// 3. CONEXÃO PUT (Sprint 2)
 async function baixarEstoque(id, estoqueAtual) {
-    // Busca o input correto da linha clicada
     const inputs = document.querySelectorAll(".input-retirada-qtd");
-    let inputDaLinha = null;
-    
-    inputs.forEach(inp => {
-        if(inp.getAttribute("data-id") === id) {
-            inputDaLinha = inp;
-        }
-    });
+    let inputDaLinha = Array.from(inputs).find(inp => inp.getAttribute("data-id") === id);
 
     if (!inputDaLinha) return;
     const quantidadeRetirada = Number(inputDaLinha.value);
 
-    // Validação usando a função obrigatória
     if (!validarRetirada(estoqueAtual, quantidadeRetirada)) {
-        alert("Quantidade inválida! Não são aceitos valores negativos ou maiores que o estoque.");
+        alert("Quantidade inválida!");
         return;
     }
-
-    const novaQuantidade = estoqueAtual - quantidadeRetirada;
 
     try {
         const resposta = await fetch(`${API_URL}/${id}`, {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ quantidade: novaQuantidade })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ quantidade: estoqueAtual - quantidadeRetirada })
         });
-
-        if (resposta.ok) {
-            carregarMateriais(); 
-        } else {
-            alert("Erro ao atualizar no servidor.");
-        }
-    } catch (erro) {
-        console.log("Erro ao dar baixa:", erro);
-    }
+        if (resposta.ok) carregarMateriais();
+    } catch (erro) { console.error("Erro ao baixar:", erro); }
 }
 
-// 4. CONEXÃO DELETE - EXCLUIR ITEM (0,5 pt)
+// 4. CONEXÃO DELETE (Sprint 2)
 async function excluirMaterial(id) {
     if (!confirm("Deseja realmente excluir este item?")) return;
-
     try {
-        const resposta = await fetch(`${API_URL}/${id}`, {
-            method: "DELETE"
-        });
-
-        if (resposta.ok) {
-            carregarMateriais(); 
-        } else {
-            alert("Erro ao excluir do servidor.");
-        }
-    } catch (erro) {
-        console.log("Erro ao excluir:", erro);
-    }
+        const resposta = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+        if (resposta.ok) carregarMateriais();
+    } catch (erro) { console.error("Erro ao excluir:", erro); }
 }
 
-// 5. CADASTRO DE MATERIAL (Mantido do original)
+// 5. CADASTRO (Sprint 1/2)
 async function cadastrarMaterial() {
     const nome = inputNome.value.trim();
     const quantidade = Number(inputQuantidade.value);
-
-    if (nome === "" || quantidade <= 0) {
-        alert("Preencha os campos corretamente.");
-        return;
-    }
-
-    const novoMaterial = { nome, quantidade };
+    if (nome === "" || quantidade <= 0) return alert("Preencha os campos!");
 
     try {
         await fetch(API_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(novoMaterial)
+            body: JSON.stringify({ nome, quantidade })
         });
-
-        inputNome.value = "";
-        inputQuantidade.value = "";
+        inputNome.value = ""; inputQuantidade.value = "";
         carregarMateriais();
-
-    } catch (erro) {
-        console.log("Erro ao cadastrar:", erro);
-    }
+    } catch (erro) { console.error("Erro ao cadastrar:", erro); }
 }
 
+// Event Listeners
 btnCadastrar.addEventListener("click", cadastrarMaterial);
+inputBusca.addEventListener("input", carregarMateriais); // Busca em tempo real
 carregarMateriais();
