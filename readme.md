@@ -3,7 +3,7 @@
 Este projeto é um sistema de gerenciamento de materiais desenvolvido para a disciplina de ADS. Evoluído ao longo das Sprints, o sistema agora conta com um dashboard completo, controle de estoque crítico e integração robusta com API.
 
 ## 🌐 Link do Projeto (Deploy)
-[https://billyzane193-crypto.github.io/prova-2bi-ads-3sem-billyzane193-crypto/]
+[https://universidade-cesumar.github.io/prova-2bi-ads-3sem-billyzane193-crypto/.]
 
 ## 🚀 Funcionalidades Atuais
 
